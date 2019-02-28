@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: subsonic
+  author: Hadrien Patte
+  company: ""
+  description: Install Subsonic on Debian and Ubuntu.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - subsonic
+    - media
+
+dependencies: []
+...
