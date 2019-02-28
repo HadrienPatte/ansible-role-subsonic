@@ -1,0 +1,24 @@
+---
+- name: Install Java
+  apt:
+    name: openjdk-8-jre
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Install Subsonic
+  apt:
+    deb: "https://s3-eu-west-1.amazonaws.com/subsonic-public/download/subsonic\
+      -{{ subsonic_version }}.deb"
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Enable Subsonic
+  systemd:
+    name: subsonic
+    state: started
+    enabled: true
+...
