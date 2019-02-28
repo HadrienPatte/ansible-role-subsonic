@@ -1,0 +1,26 @@
+<VirtualHost *:80>
+  ServerName {{ subsonic_FQDN }}
+
+  ProxyPreserveHost On
+
+  ProxyPass / http://localhost:{{ subsonic_port }}/
+  ProxyPassReverse / http://localhost:{{ subsonic_port }}/
+
+</VirtualHost>
+
+<IfModule mod_ssl.c>
+  <VirtualHost *:443>
+    ServerName {{ subsonic_FQDN }}
+
+    SSLEngine on
+    SSLCertificateFile {{ subsonic_certificate_path }}/fullchain.pem
+    SSLCertificateKeyFile {{ subsonic_certificate_path }}/privkey.pem
+    Protocols h2 http/1.1
+
+    ProxyPreserveHost On
+
+    ProxyPass / http://localhost:{{ subsonic_port }}/
+    ProxyPassReverse / http://localhost:{{ subsonic_port }}/
+
+  </VirtualHost>
+</IfModule>

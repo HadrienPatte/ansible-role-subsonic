@@ -1,0 +1,43 @@
+---
+- name: Enable apache2 proxy modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - proxy
+    - proxy_ajp
+    - proxy_http
+    - rewrite
+    - deflate
+    - headers
+    - proxy_balancer
+    - proxy_connect
+    - proxy_html
+    - ssl
+  when: subsonic_HTTP_server == "apache2"
+  notify: Restart {{ subsonic_HTTP_server }}
+
+- name: Remove default {{ subsonic_HTTP_server }} site
+  file:
+    path: /etc/{{ subsonic_HTTP_server }}/sites-enabled/{{ item }}
+    state: absent
+  loop:
+    - default
+    - 000-default.conf
+    - default-ssl.conf
+  when: subsonic_remove_default
+  notify: Restart {{ subsonic_HTTP_server }}
+
+- name: Copy {{ subsonic_HTTP_server }} configuration
+  template:
+    src: subsonic.conf-{{ subsonic_HTTP_server }}.j2
+    dest: /etc/{{ subsonic_HTTP_server }}/sites-available/subsonic.conf
+  notify: Restart {{ subsonic_HTTP_server }}
+
+- name: Enable subsonic site
+  file:
+    src: /etc/{{ subsonic_HTTP_server }}/sites-available/subsonic.conf
+    dest: /etc/{{ subsonic_HTTP_server }}/sites-enabled/subsonic.conf
+    state: link
+  notify: Restart {{ subsonic_HTTP_server }}
+...

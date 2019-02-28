@@ -1,0 +1,29 @@
+---
+- name: Install Java and {{ subsonic_HTTP_server }}
+  apt:
+    name:
+      - openjdk-8-jre
+      - "{{ subsonic_HTTP_server }}"
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Install Subsonic
+  apt:
+    deb: "https://s3-eu-west-1.amazonaws.com/subsonic-public/download/subsonic\
+      -{{ subsonic_version }}.deb"
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Enable Subsonic and {{ subsonic_HTTP_server }}
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop:
+    - subsonic
+    - "{{ subsonic_HTTP_server }}"
+...

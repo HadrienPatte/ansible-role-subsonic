@@ -11,17 +11,35 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 @pytest.mark.parametrize('name', [
     ('openjdk-8-jre'),
     ('subsonic'),
+    ('nginx'),
 ])
 def test_package_is_installed(host, name):
     package = host.package(name)
     assert package.is_installed
 
 
-def test_service_is_running(host):
-    service = host.service('subsonic')
+@pytest.mark.parametrize('name', [
+    ('subsonic'),
+    ('nginx'),
+])
+def test_service_is_running(host, name):
+    service = host.service(name)
     assert service.is_running
 
 
-def test_service_is_enabled(host):
-    service = host.service('subsonic')
+@pytest.mark.parametrize('name', [
+    ('subsonic'),
+    ('nginx'),
+])
+def test_service_is_enabled(host, name):
+    service = host.service(name)
     assert service.is_enabled
+
+
+@pytest.mark.parametrize('port', [
+    ('4040'),
+    ('80'),
+    ('443'),
+])
+def test_socket(host, port):
+    assert host.socket('tcp://0.0.0.0:' + port).is_listening
