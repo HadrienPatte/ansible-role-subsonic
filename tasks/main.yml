@@ -12,4 +12,7 @@
 
 - name: Configure {{ subsonic_HTTP_server }}
   include_tasks: HTTP_server.yml
+
+- name: Configure Subsonic
+  include_tasks: configure.yml
 ...

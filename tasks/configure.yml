@@ -1,0 +1,33 @@
+---
+- name: Create {{ subsonic_user }}
+  user:
+    name: "{{ subsonic_user }}"
+    state: present
+    create_home: false
+    system: true
+
+- name: Set ownership of the music folder
+  file:
+    path: "{{ subsonic_music_folder }}"
+    state: directory
+    owner: "{{ subsonic_user }}"
+    group: "{{ subsonic_user }}"
+
+- name: Configure Subsonic
+  ini_file:
+    path: /etc/default/subsonic
+    no_extra_spaces: true
+    section:
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    - option: SUBSONIC_ARGS
+      value: >-
+        "--port={{ subsonic_port }}
+        --max-memory={{ subsonic_max_memory }}
+        --default-music-folder='{{ subsonic_music_folder }}'"
+    - option: SUBSONIC_USER
+      value: "{{ subsonic_user }}"
+  notify: Restart Subsonic
+...

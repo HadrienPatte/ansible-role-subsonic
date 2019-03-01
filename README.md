@@ -12,7 +12,13 @@ None.
 ## Role Variables
 
 * `subsonic_version`: version to download, defaults to `6.1.5`
-* `subsonic_port`: HTTP port Subsonic should bind to, defaults to `4040`
+* `subsonic_port`: port on which Subsonic will listen for incoming HTTP traffic,
+  defaults to `4040`
+* `subsonic_max_memory`: subsonic memory limit (max Java heap size) in
+  megabytes, defaults to `100`
+* `subsonic_music_folder`: directory where subsonic will look for musics,
+  defaults to `/var/music`
+* `subsonic_user`: user that will run subsonic
 * `subsonic_FQDN`: Fully Qualified Domain Name of the server
 * `subsonic_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
