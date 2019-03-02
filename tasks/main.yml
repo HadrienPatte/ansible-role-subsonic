@@ -9,6 +9,7 @@
     self_signed_certificate_FQDN: "{{ subsonic_FQDN }}"
     self_signed_certificate_key_path: "{{ subsonic_certificate_path }}"
     self_signed_certificate_path: "{{ subsonic_certificate_path }}"
+  when: subsonic_generate_self_signed_certificate
 
 - name: Configure {{ subsonic_HTTP_server }}
   include_tasks: HTTP_server.yml

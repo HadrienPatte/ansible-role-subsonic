@@ -7,5 +7,6 @@ subsonic_user: subsonic
 subsonic_FQDN: subsonic.example.com
 subsonic_HTTP_server: nginx
 subsonic_certificate_path: /etc/ssl/private/{{ subsonic_FQDN }}
+subsonic_generate_self_signed_certificate: true
 subsonic_remove_default: false
 ...
