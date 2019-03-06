@@ -1,10 +1,14 @@
 <VirtualHost *:80>
   ServerName {{ subsonic_FQDN }}
 
+{% if subsonic_redirect_HTTPS %}
+  Redirect permanent / https://{{ subsonic_FQDN }}
+{% else %}
   ProxyPreserveHost On
 
   ProxyPass / http://localhost:{{ subsonic_port }}/
   ProxyPassReverse / http://localhost:{{ subsonic_port }}/
+{% endif %}
 
 </VirtualHost>
 

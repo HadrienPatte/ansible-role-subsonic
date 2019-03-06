@@ -29,6 +29,9 @@ None.
   role will fail to start the reverse proxy HTTP server.
 * `subsonic_remove_default`: set this to `true` to remove apache2/nginx default
   site
+* `subsonic_redirect_HTTPS`: set this to `true` to have the reverse proxy
+  automatically redirect requests to HTTPS, defaults to `false`
+
 
 # Dependencies
 
