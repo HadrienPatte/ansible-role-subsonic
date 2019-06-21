@@ -1,5 +1,5 @@
 ---
-- name: Create {{ subsonic_user }}
+- name: Create {{ subsonic_user }} user
   user:
     name: "{{ subsonic_user }}"
     state: present

@@ -4,8 +4,16 @@ server {
 
   server_name {{ subsonic_FQDN }};
 
-{% if subsonic_redirect_HTTPS %}
-  return 301 https://$host$request_uri;
+{% if subsonic_letsencrypt %}
+  location /.well-known/acme-challenge/ {
+    default_type "text/plain";
+    root /var/www/certbot;
+  }
+{% endif %}
+{% if subsonic_generate_self_signed_certificate and subsonic_redirect_HTTPS or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
+  location / {
+    rewrite ^ https://$server_name$request_uri? permanent;
+  }
 {% else %}
   location / {
     proxy_pass http://localhost:{{ subsonic_port }};
@@ -23,11 +31,18 @@ server {
   }
 {% endif %}
 }
+{% if subsonic_generate_self_signed_certificate or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
 server {
   listen 443 ssl http2;
   server_name {{ subsonic_FQDN }};
+{% if subsonic_letsencrypt %}
+  ssl_certificate /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ subsonic_FQDN }}/privkey.pem;
+{% else %}
   ssl_certificate {{ subsonic_certificate_path }}/fullchain.pem;
   ssl_certificate_key {{ subsonic_certificate_path }}/privkey.pem;
+
+{% endif %}
 
   location / {
     proxy_pass http://localhost:{{ subsonic_port }};
@@ -44,3 +59,4 @@ server {
     proxy_set_header Connection "upgrade";
   }
 }
+{% endif %}
