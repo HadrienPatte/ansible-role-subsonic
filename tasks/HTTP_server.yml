@@ -33,9 +33,6 @@
     path: /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
   register: letsencrypt_certificate
 
-- debug:
-    var: letsencrypt_certificate
-
 - name: Copy {{ subsonic_HTTP_server }} configuration
   template:
     src: subsonic.conf-{{ subsonic_HTTP_server }}.j2
