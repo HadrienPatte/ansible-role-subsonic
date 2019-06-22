@@ -1,7 +1,12 @@
 <VirtualHost *:80>
   ServerName {{ subsonic_FQDN }}
 
-{% if subsonic_redirect_HTTPS %}
+{% if subsonic_letsencrypt %}
+  Alias /.well-known/acme-challenge/ /var/www/certbot/.well-known/acme-challenge/
+  ProxyPass /.well-known/acme-challenge/ !
+{% endif %}
+
+{% if subsonic_generate_self_signed_certificate and subsonic_redirect_HTTPS or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
   Redirect permanent / https://{{ subsonic_FQDN }}
 {% else %}
   ProxyPreserveHost On
@@ -12,15 +17,21 @@
 
 </VirtualHost>
 
+{% if subsonic_generate_self_signed_certificate or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
 <IfModule mod_ssl.c>
   <VirtualHost *:443>
     ServerName {{ subsonic_FQDN }}
 
     SSLEngine on
+{% if subsonic_letsencrypt %}
+    SSLCertificateFile /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ subsonic_FQDN }}/privkey.pem
+{% else %}
     SSLCertificateFile {{ subsonic_certificate_path }}/fullchain.pem
     SSLCertificateKeyFile {{ subsonic_certificate_path }}/privkey.pem
+    {% endif %}
 
-    # HSTS (mod_headers is required) (15768000 seconds = 6 months)
+    # HSTS (15768000 seconds = 6 months)
     Header always set Strict-Transport-Security "max-age=15768000"
 
     Protocols h2 http/1.1
@@ -42,3 +53,4 @@ SSLStaplingResponderTimeout 5
 SSLStaplingReturnResponderErrors off
 SSLStaplingCache shmcb:/var/run/ocsp(128000)
 </IfModule>
+{% endif %}
