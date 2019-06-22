@@ -1,0 +1,31 @@
+---
+- name: Install certbot
+  apt:
+    name: certbot
+    state: present
+  register: apt_result
+  retries: 3
+  until: apt_result is succeeded
+
+- name: Create certbot webroot directory
+  file:
+    path: /var/www/certbot
+    state: directory
+
+- name: Restart {{ subsonic_HTTP_server }} if necessary
+  meta: flush_handlers
+
+- name: Generate Let's Encrypt certificate
+  command: >-
+    certbot certonly
+    --webroot
+    --webroot-path /var/www/certbot
+    --domain {{ subsonic_FQDN }}
+    --email {{ subsonic_letsencrypt_email }}
+    --rsa-key-size 4096
+    --agree-tos
+    --non-interactive
+    --post-hook "systemctl restart {{ subsonic_HTTP_server }}"
+  args:
+    creates: /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
+...

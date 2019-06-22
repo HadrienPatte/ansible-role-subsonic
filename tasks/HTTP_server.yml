@@ -28,6 +28,11 @@
   when: subsonic_remove_default
   notify: Restart {{ subsonic_HTTP_server }}
 
+- name: Check if letsencrypt certificate exist
+  stat:
+    path: /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
+  register: letsencrypt_certificate
+
 - name: Copy {{ subsonic_HTTP_server }} configuration
   template:
     src: subsonic.conf-{{ subsonic_HTTP_server }}.j2
