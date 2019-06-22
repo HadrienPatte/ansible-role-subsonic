@@ -20,12 +20,14 @@
     certbot certonly
     --webroot
     --webroot-path /var/www/certbot
-    --domain {{ subsonic_FQDN }}
+    {% for FQDN in subsonic_FQDN %}
+    --domain {{ FQDN }}
+    {% endfor %}
     --email {{ subsonic_letsencrypt_email }}
     --rsa-key-size 4096
     --agree-tos
     --non-interactive
     --post-hook "systemctl restart {{ subsonic_HTTP_server }}"
   args:
-    creates: /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
+    creates: /etc/letsencrypt/live/{{ subsonic_FQDN | first }}/fullchain.pem
 ...

@@ -1,5 +1,6 @@
 <VirtualHost *:80>
-  ServerName {{ subsonic_FQDN }}
+  ServerName {{ subsonic_FQDN | first }}
+  ServerAlias {{ subsonic_FQDN | join(' ') }}
 
 {% if subsonic_letsencrypt %}
   Alias /.well-known/acme-challenge/ /var/www/certbot/.well-known/acme-challenge/
@@ -7,7 +8,7 @@
 {% endif %}
 
 {% if subsonic_generate_self_signed_certificate and subsonic_redirect_HTTPS or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
-  Redirect permanent / https://{{ subsonic_FQDN }}
+  Redirect permanent / https://{{ subsonic_FQDN | first }}
 {% else %}
   ProxyPreserveHost On
 
@@ -20,12 +21,13 @@
 {% if subsonic_generate_self_signed_certificate or subsonic_letsencrypt and letsencrypt_certificate.stat.exists %}
 <IfModule mod_ssl.c>
   <VirtualHost *:443>
-    ServerName {{ subsonic_FQDN }}
+    ServerName {{ subsonic_FQDN | first }}
+    ServerAlias {{ subsonic_FQDN | join(' ') }}
 
     SSLEngine on
 {% if subsonic_letsencrypt %}
-    SSLCertificateFile /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/{{ subsonic_FQDN }}/privkey.pem
+    SSLCertificateFile /etc/letsencrypt/live/{{ subsonic_FQDN | first }}/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ subsonic_FQDN | first }}/privkey.pem
 {% else %}
     SSLCertificateFile {{ subsonic_certificate_path }}/fullchain.pem
     SSLCertificateKeyFile {{ subsonic_certificate_path }}/privkey.pem
