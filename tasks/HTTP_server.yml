@@ -30,7 +30,7 @@
 
 - name: Check if letsencrypt certificate exist
   stat:
-    path: /etc/letsencrypt/live/{{ subsonic_FQDN }}/fullchain.pem
+    path: /etc/letsencrypt/live/{{ subsonic_FQDN | first }}/fullchain.pem
   register: letsencrypt_certificate
 
 - name: Copy {{ subsonic_HTTP_server }} configuration

@@ -3,4 +3,8 @@
   hosts: all
   roles:
     - hadrienpatte.subsonic
+  vars:
+    subsonic_FQDN:
+      - a.example.com
+      - b.example.com
 ...

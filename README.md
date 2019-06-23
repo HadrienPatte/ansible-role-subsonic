@@ -19,7 +19,7 @@ None.
 * `subsonic_music_folder`: directory where subsonic will look for musics,
   defaults to `/var/music`
 * `subsonic_user`: user that will run subsonic
-* `subsonic_FQDN`: Fully Qualified Domain Name of the server
+* `subsonic_FQDN`: List of Fully Qualified Domain Names of the server
 * `subsonic_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
 * `subsonic_certificate_path`: directory where the TSL/SSL certificate will be

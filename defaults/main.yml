@@ -4,12 +4,13 @@ subsonic_port: 4040
 subsonic_max_memory: 100
 subsonic_music_folder: /var/music
 subsonic_user: subsonic
-subsonic_FQDN: subsonic.example.com
+subsonic_FQDN:
+  - subsonic.example.com
 subsonic_HTTP_server: nginx
-subsonic_certificate_path: /etc/ssl/private/{{ subsonic_FQDN }}
+subsonic_certificate_path: /etc/ssl/private/{{ subsonic_FQDN | first }}
 subsonic_generate_self_signed_certificate: true
 subsonic_redirect_HTTPS: false
 subsonic_letsencrypt: false
-subsonic_letsencrypt_email: admin@{{ subsonic_FQDN }}
+subsonic_letsencrypt_email: admin@{{ subsonic_FQDN | first }}
 subsonic_remove_default: false
 ...
