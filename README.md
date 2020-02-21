@@ -23,7 +23,7 @@ None.
 * `subsonic_HTTP_server`: HTTP reverse proxy server, possible values are
   `apache2` and `nginx`, defaults to `nginx`
 * `subsonic_certificate_path`: directory where the TSL/SSL certificate will be
-* `subsonic_generate_self_signed_certificate`: wether to generate a self-signed
+* `subsonic_generate_self_signed_certificate`: whether to generate a self-signed
   certificate, defaults to `true`.
 * `subsonic_redirect_HTTPS`: set this to `true` to have the reverse proxy
   automatically redirect requests to HTTPS when using self-signed certificate,

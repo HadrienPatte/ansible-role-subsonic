@@ -28,7 +28,7 @@
   when: subsonic_remove_default
   notify: Restart {{ subsonic_HTTP_server }}
 
-- name: Check if letsencrypt certificate exist
+- name: Check if letsencrypt certificate exists
   stat:
     path: /etc/letsencrypt/live/{{ subsonic_FQDN | first }}/fullchain.pem
   register: letsencrypt_certificate
