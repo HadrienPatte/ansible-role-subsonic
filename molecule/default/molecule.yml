@@ -1,11 +1,9 @@
 ---
 platforms:
   - name: debian
-    image: jrei/systemd-debian:10
+    image: minimum2scp/systemd-stretch
     privileged: true
     command: /sbin/init
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     published_ports:
       - "80"
       - "443"
